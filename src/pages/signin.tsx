@@ -63,20 +63,6 @@ function SignIn() {
     }
   };
 
-  const signOut = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      console.error("Error signing out:", error.message);
-    } else {
-      toast({
-        variant: "default",
-        title: "Signed out successfully",
-      });
-      router.push("/signin").catch((err) => {
-        console.error("Failed to navigate", err);
-      });
-    }
-  };
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -88,10 +74,10 @@ function SignIn() {
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  const handleSubmit= async (values: z.infer<typeof formSchema>) =>{
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    signInWithPassword(values.email, values.password).catch((err) => {
+    await signInWithPassword(values.email, values.password).catch((err) => {
       console.error(err);
     });
   }
@@ -104,7 +90,11 @@ function SignIn() {
           <Form {...form}>
             <h1 className="mb-4 text-3xl font-bold text-blue-800">Login</h1>
 
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <form onSubmit={(event)=>{
+                event.preventDefault();
+                void form.handleSubmit(handleSubmit)()
+              }} 
+            className="space-y-8">
               <FormField
                 control={form.control}
                 name="email"
@@ -126,6 +116,7 @@ function SignIn() {
                     <FormLabel>Password</FormLabel>
                     <FormControl>
                       <Input
+                        type="password"
                         className="w-96"
                         placeholder="password"
                         {...field}
@@ -137,10 +128,7 @@ function SignIn() {
               />
               <div className="flex justify-end">
                 <Button type="submit">Sign In</Button>
-                {/* <Button onClick={signOut}>Log Out</Button> */}
-                {/* <Button className="ml-3" onClick={() => setIsSignUp((s) => !s)}>
-                  Sign UP
-                </Button> */}
+               
               </div>
             </form>
           </Form>

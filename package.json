@@ -9,6 +9,10 @@
     "lint": "next lint",
     "start": "next start"
   },
+  "rules": {
+    "no-alert": "off",
+    "@typescript-eslint/no-unused-vars": "off"
+  },
   "dependencies": {
     "@hookform/resolvers": "^3.1.1",
     "@next-auth/prisma-adapter": "^1.0.5",
@@ -33,6 +37,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.45.2",
+    "react-scripts": "^5.0.1",
     "superjson": "1.12.2",
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.6",

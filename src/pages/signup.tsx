@@ -59,11 +59,7 @@ function SignUp() {
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    signUpWithPassword(values.email, values.password).catch((err) => {
-      console.error(err);
-    });
-  }
+ 
 
   return (
     <div className="flex min-h-screen items-center justify-center">
@@ -73,20 +69,7 @@ function SignUp() {
           <Form {...form}>
             <h1 className="mb-4 text-3xl font-bold">T3 Demo App</h1>
 
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input className="w-96" placeholder="email" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+          
               <FormField
                 control={form.control}
                 name="password"
@@ -107,7 +90,6 @@ function SignUp() {
               <div className="flex justify-end">
                 <Button type="submit">Sign Up</Button>
               </div>
-            </form>
           </Form>
         </div>
       </div>

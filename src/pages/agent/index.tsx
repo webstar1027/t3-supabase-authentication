@@ -41,38 +41,20 @@ export default function Content() {
     },
   });
 
-  const handleChange = (e : any) => {
-    setInputValue(e.target.value);
-  };
 
-  const handleSubmit = (e : any) => {
-    e.preventDefault();
-    createExample.mutate({ firstEntry: inputValue });
-  };
-
-  const handleChangePrivate = (e : any) => {
-    setInputPrivateValue(e.target.value);
-  };
-
-  const signOut = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      console.error("Error signing out:", error.message);
-    } else {
-      router.push("/signin").catch((err) => {
-        console.error("Failed to navigate", err);
-      });
-    }
-  };
-
-  const handlePrivateSubmit = (e : any) => {
-    e.preventDefault();
-    if (!!user) {
-      createPrivateExample.mutate({
-        firstEntry: inputPrivateValue,
-        user_id: user.id,
-      });
-    }
+  const signOut = () => {
+    supabase.auth.signOut().then(({ error }) => {
+      if (error) {
+        console.error("Error signing out:", error.message);
+      } else {
+        router.push("/signin").catch((err) => {
+          console.error("Failed to navigate", err);
+        });
+      }
+    }).catch((error) => {
+      // Catch any errors that occur during the sign-out process
+      console.error("Sign out failed:", error);
+    });
   };
 
   return (
@@ -82,33 +64,15 @@ export default function Content() {
         <h1 className="text-3xl text-yellow-600">Gmail: {user?.email}</h1>
         <h1 className="text-3xl text-yellow-600">Role: {user?.role}</h1>
         {/* <h1>{data}</h1> */}
-        <Button onClick={signOut}>Sign Out</Button>
-      </div>
-
-      <div className="space-y-1">
-        {/* <h1 className="text-xl">Input Box</h1> */}
-        {/* <form onSubmit={handleSubmit} className="flex space-x-4">
-          <Input
-            type="text"
-            value={inputValue}
-            onChange={handleChange}
-            placeholder="Enter a string"
-            className="flex-grow"
-          />
-          <Button type="submit">Submit</Button>
-        </form> */}
-
-        {/* <h1 className="text-xl">Private Input Box</h1> */}
-        {/* <form onSubmit={handlePrivateSubmit} className="flex space-x-4">
-          <Input
-            type="text"
-            value={inputPrivateValue}
-            onChange={handleChangePrivate}
-            placeholder="Enter a private string"
-            className="flex-grow"
-          />
-          <Button type="submit">Submit</Button>
-        </form> */}
+        <Button onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+          try {
+            signOut();
+            // Handle successful sign out if needed
+          } catch (error) {
+            // Handle any errors that occur during sign out
+            console.error('Error signing out:', error);
+          }
+        }}>Sign Out</Button>
       </div>
 
       <div className="mt-8 grid grid-cols-2 gap-4">
